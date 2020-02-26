@@ -5990,9 +5990,16 @@ METHOD create_xl_sheet_sheet_data.
       CLEAR l_autofilter_hidden.
     ELSE.
       READ TABLE lt_values INTO ls_values WITH KEY column = ls_last_row-cell_column.
-      IF sy-subrc = 0 AND ls_values-value = ls_last_row-cell_value.
+*{   REPLACE 
+*\      IF sy-subrc = 0 AND ls_values-value = ls_last_row-cell_value.
+*\        CLEAR l_autofilter_hidden.
+*\      ENDIF.
+     IF sy-subrc = 0.
+      loop at LT_VALUES into ls_values where VALUE = ls_last_row-cell_value and column = ls_last_row-cell_column.
         CLEAR l_autofilter_hidden.
-      ENDIF.
+      endloop.
+    ENDIF.
+*}   REPLACE
     ENDIF.
     CLEAR ls_style_mapping.
 *Create row element
